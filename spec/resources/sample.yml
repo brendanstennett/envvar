@@ -1,0 +1,11 @@
+required:
+  - REQUIRED_1
+  - REQUIRED_2
+defaults:
+  FOO: bar
+  BAZ: qux
+env1:
+  FOO: bat
+  BAT: nat
+env2:
+  FOO: baf
