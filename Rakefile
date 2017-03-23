@@ -1,6 +1,29 @@
-require "bundler/gem_tasks"
-require "rspec/core/rake_task"
+#!/usr/bin/env rake
 
-RSpec::Core::RakeTask.new(:spec)
+require 'bundler/gem_helper'
 
-task :default => :spec
+namespace 'envvar' do
+  Bundler::GemHelper.install_tasks name: 'envvar'
+end
+
+namespace 'envvar-rails' do
+  class EnvvarRailsGemHelper < Bundler::GemHelper
+    def tag_version; end # noop
+  end
+
+  EnvvarRailsGemHelper.install_tasks name: 'envvar-rails'
+end
+
+task build: %w(envvar:build envvar-rails:build)
+task install: %w(envvar:install envvar-rails:install)
+task release: %w(envvar:release envvar-rails:release)
+
+require 'rspec/core/rake_task'
+
+desc 'Run all specs'
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.rspec_opts = %w(--color)
+  t.verbose = false
+end
+
+task default: :spec
